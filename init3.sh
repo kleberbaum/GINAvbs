@@ -125,7 +125,7 @@ EOS
 
 # normal funcrions
 
-install_dependent_packages() {
+install() {
     # Install packages passed in via argument array
     declare -a _argArray1=(${!1})
     declare -a _installArray=("")
@@ -153,13 +153,17 @@ install_dependent_packages() {
 			# and cleaning
 			rm -rf /var/cache/apk/* /var/cache/distfiles/*
 
-			cat <<- EOF > /etc/periodic/${INTERVAL}/gitup.timer
-				#!/bin/bash
+			cat <<- EOF > /etc/periodic/${INTERVAL}/ginavbs.sh
+				#!/usr/bin/env bash
 
 				git add .
-				git commit -m "$(date) automated backup (gitup.sh)"
+				git commit -m "$(date) automated backup (ginavbs.sh)"
 				git push -fu origin master
 			EOF
+
+			chmod +x /etc/periodic/${INTERVAL}/ginavbs.sh
+
+			exec "/usr/sbin/crond" "-f" &
 		;;
 		'arch'|'manjaro')
 			# installing if started as root
@@ -185,8 +189,8 @@ install_dependent_packages() {
 
 			# installing if sudo is installed
 			elif [[ $(sudo apt-get install ${_installArray[@]} -y) ]]; then
-					# and cleaning
-					sudo apt-get clean -y
+				# and cleaning
+				sudo apt-get clean -y
 
 			# try again as root
 			else
@@ -418,7 +422,7 @@ main(){
 	done
 
 	# Install packages used by this installation script
-	install_dependent_packages __GINA_DEPS[@]
+	install __GINA_DEPS[@]
 
 	if ! $(is_repo) || ! [[ $(ls -A "${__DIR}" 2>/dev/null) ]]; then
 		make_repo
