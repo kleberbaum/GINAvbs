@@ -153,12 +153,12 @@ install() {
 			# and cleaning
 			rm -rf /var/cache/apk/* /var/cache/distfiles/*
 
-			cat <<- EOF > /etc/periodic/${INTERVAL}/ginavbs.sh
+			cat <<-'EOF' > /etc/periodic/${INTERVAL}/ginavbs.sh
 				#!/usr/bin/env bash
 
 				git add .
 				git commit -m "$(date) automated backup (ginavbs.sh)"
-				git push -fu origin master
+				git push --force origin master
 			EOF
 
 			chmod +x /etc/periodic/${INTERVAL}/ginavbs.sh
