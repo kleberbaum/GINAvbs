@@ -435,14 +435,14 @@ main(){
 
 	PASSWORD="${_tmp#*:}"
 
-	if !( [[ ${USER} ]] && [[ ${PASSWORD} ]] ) && !( [[ ${SSHKEY} ]] ); then
+	if ! [[ ${USER} ]] && ! [[ ${PASSWORD} ]] && ! [[ ${SSHKEY} ]]; then
 		return 5
 	fi
 
 	# Install packages used by this installation script
 	install __GINA_DEPS[@]
 
-	if !( $(is_repo) || [[ $(ls -A "${__DIR}" 2>/dev/null) ]]); then
+	if ! $(is_repo) || ! [[ $(ls -A "${__DIR}" 2>/dev/null) ]]; then
 		make_repo
 	fi
 
