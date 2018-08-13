@@ -254,10 +254,8 @@ update_repo() {
 
 	git add . || true
 	git commit -m "$(date) GINA init (init.sh)" || true
-
 	# Pull the latest commits
 	git fetch origin || true
-	
     git pull --quiet \
 			 --strategy=recursive \
 			 --strategy-option=theirs \
@@ -278,7 +276,7 @@ update_repo() {
 	echo -e "${OVER}+ ${TICK} Update repository in ${__DIR}"
 	# Always return 0? Not sure this is correct
 	return 0
-} 2>/dev/null
+} #2>/dev/null
 
 nuke_everything() {
 	# I am pretty shure there is a better way
