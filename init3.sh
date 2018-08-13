@@ -260,7 +260,6 @@ update_repo() {
 
     git pull --force \
 			 --quiet \
-			 --no-edit \
 			 --strategy=recursive \
 			 --strategy-option=theirs \
 			 --allow-unrelated-histories\
