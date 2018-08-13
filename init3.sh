@@ -251,6 +251,7 @@ update_repo() {
     #git stash --all --quiet &> /dev/null || true # Okay for stash failure
     #git clean --quiet --force -d || true # Okay for already clean directory
 	#git checkout ginavbs || true
+	
 	git add . || true
 	git commit -m "$(date) GINA init (init.sh)" || true
 	# Pull the latest commits
