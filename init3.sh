@@ -2,30 +2,38 @@
 # shellcheck disable=SC1090
 
 # GINAvbs: A backup solution making use of the power of Git
-# (c) 2017-2018 GINAvbs, LLC (https://erebos.xyz/)
-# Easy to use backups for configurations, logs and sql.
+# (c) 2016-2018 GINAvbs, LLC (https://erebos.xyz/)
+# Easy to use backups for configurations, logs and sql files.
 
 # This file is copyright under the latest version of the EUPL.
 # Please see LICENSE file for your rights under this license.
 
-# This Programm is initialy designt for script kiddys and lazy network admins.
-# Use at your own risk.
+# This Programm is initialy designt for the Erebos Network.
+# If you are neider of those make sure be warned thet you use, copie and/or
+# modify at your own risk.
 
+# Futhurmore it's not recommended to use GINAvbs with another shell than
+# GNU bash version 4.4
+
+# It is highly recomended to use set -eEuo pipefail for ervery setup script
 set -o errexit  # Used to exit upon error, avoiding cascading errors
-set -o errtrace # Activate traps
+set -o errtrace # Activate traps to catch errors on exit
 set -o pipefail # Unveils hidden failures
 set -o nounset  # Exposes unset variables
 
+
 #### SPECIAL FUNCTIONS #####
-# Functions that serve the purpos of makeing codeing more convinient
+# Functions that serve the purpos of makeing codeing more convinient and
+# debugging a bit easier.
+# Do not missunderstand "SPECIAL FUNCTIONS" as a test function.
 #
-# SPECIAL FUNCTIONS start with a CAPS part
+# NOTE: SPECIAL FUNCTIONS start with three CAPS letter.
 #
 # IF YOU ARE AWARE OF A BETTER FORM OF NAMING FEEL FREE TO OPEN A ISSUE
-# OTHERWISE PLEASE USE THIS AS A GUIDLINE FOR ANY COMMIT
+# OTHERWISE PLEASE USE THIS AS A GUIDLINE FOR ANY COMMIT.
 
 EOS_string(){
-	str='\n' read -r -d '' $1 || true;
+	IFS=$'\n' read -r -d '' $1 || true;
 	return 0
 } 2>/dev/null
 
