@@ -425,7 +425,7 @@ main(){
 
 	_tmp="${REPOSITORY#*://}"
 
-	REPOSITORY="${_tmp%%/'.'*}.git"
+	REPOSITORY="${_tmp%%/.*}"
 
 	_tmp="${_tmp%%/*}"
 
