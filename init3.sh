@@ -61,6 +61,8 @@ HOST=${GINA_HOST:-""}
 USER=${GINA_USER:-""}
 PASSWORD=${GINA_PASSWORD:-""}
 
+INTERVAL=${GINA_INTERVAL:-"weekly"}
+
 # Set some colors couse without ain't no fun
 COL_NC='\e[0m' # No Color
 COL_LIGHT_GREEN='\e[1;32m'
@@ -150,6 +152,14 @@ install_dependent_packages() {
 	    	apk add --force ${_installArray[@]}
 			# and cleaning
 			rm -rf /var/cache/apk/* /var/cache/distfiles/*
+
+			cat <<- EOF > /etc/periodic/${INTERVAL}/gitup.timer
+				#!/bin/bash
+
+				git add .
+				git commit -m "$(date) automated backup (gitup.sh)"
+				git push -fu origin master
+			EOF
 		;;
 		'arch'|'manjaro')
 			# installing if started as root
@@ -260,6 +270,7 @@ update_repo() {
 
     git pull --force \
 			 --quiet \
+			 --no-edit \
 			 --strategy=recursive \
 			 --strategy-option=theirs \
 			 --allow-unrelated-histories\
@@ -279,7 +290,7 @@ update_repo() {
 	echo -e "${OVER}+ ${TICK} Update repository in ${__DIR}"
 	# Always return 0? Not sure this is correct
 	return 0
-} #2>/dev/null
+} 2>/dev/null
 
 nuke_everything() {
 	# I am pretty shure there is a better way
