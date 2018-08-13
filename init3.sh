@@ -435,7 +435,7 @@ main(){
 
 	PASSWORD="${_tmp#*:}"
 
-	if ! [[ ${USER} ]] && ! [[ ${PASSWORD} ]] && ! [[ ${SSHKEY} ]]; then
+	if ! [[ ${USER} ]] || ! [[ ${PASSWORD} ]] && ! [[ ${SSHKEY} ]]; then
 		return 5
 	fi
 
