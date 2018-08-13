@@ -256,9 +256,20 @@ update_repo() {
 	git commit -m "$(date) GINA init (init.sh)" || true
 	# Pull the latest commits
 	git fetch origin || true
-    git pull --quiet --allow-unrelated-histories origin master || true
+    git pull --quiet \
+			 --strategy=recursive \
+			 --strategy-option=theirs \
+			 --allow-unrelated-histories\
+			 origin master \
+			 || true
+
     # Show a completion message
-	git push --force --quiet --set-upstream origin master || true
+	git push --force \
+			 --quiet \
+			 --set-upstream \
+			 origin master \
+			 || true
+
 	# Clone the repo and return the return code from this command
 	#git clone -q "${REPOSITORY}" "${__DIR}" &> /dev/null || return $?
 	# Show a colored message showing it's status
