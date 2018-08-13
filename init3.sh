@@ -33,36 +33,41 @@ set -o nounset  # Exposes unset variables
 # OTHERWISE PLEASE USE THIS AS A GUIDLINE FOR ANY COMMIT.
 
 EOS_string(){
+	# allows to store EOFs in strings
 	IFS=$'\n' read -r -d '' $1 || true;
 	return 0
 } 2>/dev/null
 
-######## VARIABLES #########
-# For better maintainability, we define the most impotant variables at the top.
-# This allows us to make a change in one place and lowers the risk of dumb bugs.
+######## GLOBAL VARIABLES AND ENVIRONMENT VARIABLES #########
+# For better maintainability, we define all global variables at the top.
+# This allows us to make changes at with thei defaults
+# in one place and lowers the risk of dumb bugs.
 #
 # GLOBAL variables are all, written in CAPS
 # LOCAL variables are all, starting with a underscore
 #
-# Variables starting with double underscore are readonly
+# NOTE: Variables starting with double underscore are readonly
 #
 # IF YOU ARE AWARE OF A BETTER FORM OF NAMING FEEL FREE TO OPEN A ISSUE
 # OTHERWISE PLEASE USE THIS AS A GUIDLINE FOR ANY COMMIT
 
-source /etc/os-release
+source /etc/os-release # source os release environment variables
 
-readonly __DISTRO="${ID}"
-readonly __DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-readonly __FILE="${__DIR}/$(basename "${BASH_SOURCE[0]}")"
-readonly __BASE="$(basename ${__FILE})"
-readonly __ROOT="$(cd "$(dirname "${__DIR}")" && pwd)"
+# SYSTEM / USER VARIABLES
+readonly __DISTRO="${ID}" # get distro id from /etc/os-release
+readonly __DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" # workdir
+readonly __FILE="${__DIR}/$(basename "${BASH_SOURCE[0]}")" # self
+readonly __BASE="$(basename ${__FILE})" # workdir/self
+readonly __ROOT="$(cd "$(dirname "${__DIR}")" && pwd)" # homedir
 
-# GINAvbs has some dependencies that need to be installed
+# DEPENDENCY / LOGS VARIABLES
+# GINAvbs has currently one dependency that needs to be installed
 readonly __GINA_DEPS=(git)
 # Location of installation logs
 readonly __GINA_LOGS="${__DIR}/install.log"
 
-# Check if any environment variables are set
+# SETUP VARIABLES
+# Define and set default for enviroment variables
 REPOSITORY=${GINA_REPOSITORY:-""}
 SSHKEY=${GINA_SSHKEY:-""}
 HOST=${GINA_HOST:-""}
@@ -71,18 +76,23 @@ PASSWORD=${GINA_PASSWORD:-""}
 
 INTERVAL=${GINA_INTERVAL:-"weekly"}
 
-# Set some colors couse without ain't no fun
-COL_NC='\e[0m' # No Color
-COL_LIGHT_GREEN='\e[1;32m'
-COL_LIGHT_RED='\e[1;31m'
-COL_LIGHT_MAGENTA='\e[1;95m'
-TICK="[${COL_LIGHT_GREEN}✓${COL_NC}]"
-CROSS="[${COL_LIGHT_RED}✗${COL_NC}]"
-INFO="[i]"
-# shellcheck disable=SC2034
-DONE="${COL_LIGHT_GREEN} done!${COL_NC}"
-OVER="\\r\\033[K"
+# COLOR / FORMAT VARIABLES
+# Set some colors because without it ain't no fun
+COL_NC='\e[0m' # default color
 
+COL_LIGHT_GREEN='\e[1;32m' # green
+COL_LIGHT_RED='\e[1;31m' # red
+COL_LIGHT_MAGENTA='\e[1;95m' # MAGENTA
+
+TICK="[${COL_LIGHT_GREEN}✓${COL_NC}]" # green thick
+CROSS="[${COL_LIGHT_RED}✗${COL_NC}]" # red cross
+INFO="[i]" # info sign
+
+# shellcheck disable=SC2034
+DONE="${COL_LIGHT_GREEN} done!${COL_NC}" # a small motivation ^^
+OVER="\\r\\033[K" # back to line start
+
+# Our temporary logo, will might be updated someday
 EOS_string LOGO <<-'EOS'
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 +                      ___________   _____        __                           +
@@ -94,20 +104,22 @@ EOS_string LOGO <<-'EOS'
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EOS
 
+# Licenceing, recommedations and warnings
 EOS_string LICENSE <<-'EOS'
-+ # GINAvbs: A backup solution making use of the power of Git
-+ # (c) 2017-2018 GINAvbs, LLC (https://erebos.xyz/)
-+ # Easy to use backups for configurations, logs and sql.
-+
 + # This file is copyright under the latest version of the EUPL.
 + # Please see LICENSE file for your rights under this license.
 +
-+ # This Programm is initialy designt for script kiddys and lazy network admins.
-+ # Use at your own risk.
++ # This Programm is initialy designt for the Erebos Network.
++ # If you are neider of those make sure be warned thet you use, copie and/or
++ # modify at your own risk.
++
++ # Futhurmore it's not recommended to use GINAvbs with another shell than
++ # GNU bash version 4.4
 +
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EOS
 
+# Manual, learn more on our github site
 EOS_string MANPAGE <<-'EOS'
 + # -e --export "exports to a remote repository"
 + # -i --import "imports from a remote repository"
@@ -119,6 +131,7 @@ EOS_string MANPAGE <<-'EOS'
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EOS
 
+# This line has decorative purbos only
 EOS_string COOL_LINE <<-'EOS'
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EOS
