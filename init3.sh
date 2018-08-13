@@ -276,7 +276,7 @@ update_repo() {
 	echo -e "${OVER}+ ${TICK} Update repository in ${__DIR}"
 	# Always return 0? Not sure this is correct
 	return 0
-} 2>/dev/null
+} #2>/dev/null
 
 nuke_everything() {
 	# I am pretty shure there is a better way
