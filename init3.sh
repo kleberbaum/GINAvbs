@@ -255,6 +255,7 @@ update_repo() {
 	git add . || true
 	git commit -m "$(date) GINA init (init.sh)" || true
 	# Pull the latest commits
+	git fetch origin
     git pull --quiet --allow-unrelated-histories origin master || true
     # Show a completion message
 	git push --force --quiet --set-upstream origin master || true
