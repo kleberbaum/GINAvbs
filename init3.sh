@@ -254,9 +254,12 @@ update_repo() {
 
 	git add . || true
 	git commit -m "$(date) GINA init (init.sh)" || true
+
 	# Pull the latest commits
 	git fetch origin || true
-    git pull --quiet \
+
+    git pull --force \
+			 --quiet \
 			 --strategy=recursive \
 			 --strategy-option=theirs \
 			 --allow-unrelated-histories\
