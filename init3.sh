@@ -423,11 +423,9 @@ main(){
 
 	local _tmp=""
 
-	_tmp="${REPOSITORY#*://}"
+	REPOSITORY="${REPOSITORY#*://}"
 
-	REPOSITORY="${_tmp%%/.*}"
-
-	_tmp="${_tmp%%/*}"
+	_tmp="${REPOSITORY%%/*}"
 
 	HOST="${_tmp#*@}"
 
