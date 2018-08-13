@@ -279,14 +279,14 @@ update_repo() {
 			 --strategy-option=theirs \
 			 --allow-unrelated-histories\
 			 origin master \
-			 &>/dev/null
+			 || true
 
     # Show a completion message
 	git push --force \
 			 --quiet \
 			 --set-upstream \
 			 origin master \
-			 &>/dev/null
+			 || true
 
 	# Clone the repo and return the return code from this command
 	#git clone -q "${REPOSITORY}" "${__DIR}" &> /dev/null || return $?
@@ -421,14 +421,34 @@ main(){
 		esac
 	done
 
-	# Install packages used by this installation script
-	install __GINA_DEPS[@]
+	local _tmp=""
 
-	if ! $(is_repo) || ! [[ $(ls -A "${__DIR}" 2>/dev/null) ]]; then
-		make_repo
+	_tmp="${REPOSITORY#*://}"
+
+	REPOSITORY="${_tmp%%/.*}.git"
+
+	_tmp="${_tmp%%/*}"
+
+	HOST="${_tmp#*@}"
+
+	_tmp="${_tmp%%@*}"
+
+	USER="${_tmp%%:*}"
+
+	PASSWORD="${_tmp#*:}"
+
+	if [[ ${USER} ]] && [[ ${PASSWORD} ]] || [[ ${SSHKEY} ]]; then
+		# Install packages used by this installation script
+		install __GINA_DEPS[@]
+
+		if ! $(is_repo) || ! [[ $(ls -A "${__DIR}" 2>/dev/null) ]]; then
+			make_repo
+		fi
+
+		update_repo
+	else
+		return 5
 	fi
-
-	update_repo
 
 	return 0
 }
