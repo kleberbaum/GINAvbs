@@ -279,14 +279,14 @@ update_repo() {
 			 --strategy-option=theirs \
 			 --allow-unrelated-histories\
 			 origin master \
-			 || true &>/dev/null
+			 &>/dev/null
 
     # Show a completion message
 	git push --force \
 			 --quiet \
 			 --set-upstream \
 			 origin master \
-			 || true &>/dev/null
+			 &>/dev/null
 
 	# Clone the repo and return the return code from this command
 	#git clone -q "${REPOSITORY}" "${__DIR}" &> /dev/null || return $?
