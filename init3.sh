@@ -371,7 +371,7 @@ error_handler(){
 	40) echo "+ Bad Request: This function needs at least one Argument!";;
 	43) echo "+ Permission Denied: Please try again as root!";;
 	44) echo "+ Not Found: Username and Password not found!";;
-	51)	echo "+ Not Implemented: Please read the Manual, fool!";;
+	51)    echo "+ Not Implemented: Please read the Manual, fool!";;
 	*)  echo "+ Internal Error: Shit happens! Something has gone wrong.";;
 	esac
 
@@ -518,7 +518,7 @@ main(){
 	return $?
 }
 
-# traps everything
+# Traps everything
 trap exit_handler 0 1 2 3 13 15 # EXIT HUP INT QUIT PIPE TERM
 
 make_temporary_log
