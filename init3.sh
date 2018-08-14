@@ -38,6 +38,7 @@ EOS_string(){
 	return $?
 } 2>/dev/null
 
+
 ######## GLOBAL VARIABLES AND ENVIRONMENT VARIABLES #########
 # For better maintainability, we define all global variables at the top.
 # This allows us to make changes at their defaults
@@ -92,6 +93,7 @@ INFO="[i]" # info sign
 DONE="${COL_LIGHT_GREEN} done!${COL_NC}" # a small motivation ^^
 OVER="\\r\\033[K" # back to line start
 
+# LOGO / LICENSE / MANPAGE VARIABLES
 # Our temporary logo, will might be updated someday
 EOS_string LOGO <<-'EOS'
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -106,6 +108,10 @@ EOS
 
 # Licenceing, recommedations and warnings
 EOS_string LICENSE <<-'EOS'
++ # GINAvbs: A backup solution making use of the power of Git
++ # (c) 2016-2018 GINAvbs, LLC (https://erebos.xyz/)
++ # Easy to use backups for configurations, logs and sql files.
++
 + # This file is copyright under the latest version of the EUPL.
 + # Please see LICENSE file for your rights under this license.
 +
@@ -147,7 +153,7 @@ EOS
 # OTHERWISE PLEASE USE THIS AS A GUIDELINE FOR ANY COMMIT
 
 install() {
-	# Install packages passed in via argument array
+	# Install GINAvbs and dependency packages passed in via argument array
 	declare -a _argArray1=(${!1})
 	declare -a _installArray=("")
 
@@ -155,7 +161,6 @@ install() {
 	# list so we just create an array of packages not currently installed to
 	# cut down on the amount of download traffic.
 
-	# For each package,
 	for i in "${_argArray1[@]}"; do
 		echo -ne "+ ${INFO} Checking for ${i}..."
 		if [[ $(which "${i}" 2>/dev/null) ]]; then
@@ -229,7 +234,7 @@ install() {
 	fi
 
 	return $?
-}
+} 2>/dev/null
 
 make_temporary_log() {
 	# Create a random temporary file for the log
@@ -249,8 +254,8 @@ copy_to_install_log() {
 	sed 's/\[[0-9;]\{1,5\}m//g' < /proc/$$/fd/3 > "${installLogLoc}"
 } 2>/dev/null
 
-# A function for checking if a folder is a git repository
 is_repo() {
+	# Check if a folder is a git repository
 	if [[ -d "${__DIR}/.git" ]]; then
 		echo true
 	else
@@ -258,9 +263,8 @@ is_repo() {
 	fi
 
 	return $?
-}
+} 2>/dev/null
 
-# A function to clone a repo
 make_repo() {
 	# Display the message and use the color table to preface the message
 	# with an "info" indicator
@@ -371,7 +375,7 @@ error_handler(){
 	40) echo "+ Bad Request: This function needs at least one Argument!";;
 	43) echo "+ Permission Denied: Please try again as root!";;
 	44) echo "+ Not Found: Username and Password not found!";;
-	51)    echo "+ Not Implemented: Please read the Manual, fool!";;
+	51) echo "+ Not Implemented: Please read the Manual, fool!";;
 	*)  echo "+ Internal Error: Shit happens! Something has gone wrong.";;
 	esac
 
