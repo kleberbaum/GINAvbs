@@ -147,11 +147,11 @@ EOS
 # OTHERWISE PLEASE USE THIS AS A GUIDELINE FOR ANY COMMIT
 
 install() {
-    # Install packages passed in via argument array
-    declare -a _argArray1=(${!1})
-    declare -a _installArray=("")
+	# Install packages passed in via argument array
+	declare -a _argArray1=(${!1})
+	declare -a _installArray=("")
 
-    # Debian based package install - debconf will download the entire package
+	# Debian based package install - debconf will download the entire package
 	# list so we just create an array of packages not currently installed to
 	# cut down on the amount of download traffic.
 
@@ -170,7 +170,7 @@ install() {
 		case ${__DISTRO} in
 		'alpine')
 			# Installing Packages
-	    	apk add --force ${_installArray[@]}
+			apk add --force ${_installArray[@]}
 			# Cleaning cached files
 			rm -rf /var/cache/apk/* /var/cache/distfiles/*
 
@@ -232,21 +232,21 @@ install() {
 }
 
 make_temporary_log() {
-    # Create a random temporary file for the log
-    TEMPLOG=$(mktemp /tmp/gina_temp.XXXXXX)
-    # Open handle 3 for templog
-    exec 3>"$TEMPLOG"
-    # Delete templog, but allow for addressing via file handle
-    # This lets us write to the log without having a temporary file on
+	# Create a random temporary file for the log
+	TEMPLOG=$(mktemp /tmp/gina_temp.XXXXXX)
+	# Open handle 3 for templog
+	exec 3>"$TEMPLOG"
+	# Delete templog, but allow for addressing via file handle
+	# This lets us write to the log without having a temporary file on
 	# the drive, which is meant to be a security measure so there is not a
 	# lingering file on the drive during the install process
-    rm -f "$TEMPLOG"
+	rm -f "$TEMPLOG"
 } 2>/dev/null
 
 copy_to_install_log() {
-    # Copy the contents of file descriptor 3 into the install log
-    # Since we use color codes such as '\e[1;33m', they should be removed
-    sed 's/\[[0-9;]\{1,5\}m//g' < /proc/$$/fd/3 > "${installLogLoc}"
+	# Copy the contents of file descriptor 3 into the install log
+	# Since we use color codes such as '\e[1;33m', they should be removed
+	sed 's/\[[0-9;]\{1,5\}m//g' < /proc/$$/fd/3 > "${installLogLoc}"
 } 2>/dev/null
 
 # A function for checking if a folder is a git repository
@@ -262,9 +262,9 @@ is_repo() {
 
 # A function to clone a repo
 make_repo() {
-    # Display the message and use the color table to preface the message
+	# Display the message and use the color table to preface the message
 	# with an "info" indicator
-    echo -ne "+ ${INFO} Create repository in ${__DIR}..."
+	echo -ne "+ ${INFO} Create repository in ${__DIR}..."
 
 	# delete everything in it so git can clone into it
 	#rm -rf ${__DIR}/*
@@ -275,14 +275,14 @@ make_repo() {
 
 	#git branch ginavbs || true
 
-    # Clone the repo and return the return code from this command
-    #git clone -q "${REPOSITORY}" "${__DIR}" &> /dev/null || return $?
+	# Clone the repo and return the return code from this command
+	#git clone -q "${REPOSITORY}" "${__DIR}" &> /dev/null || return $?
 
-    # Show a colored message showing it's status
-    echo -e "${OVER}+ ${TICK} Create repository in ${__DIR}"
+	# Show a colored message showing it's status
+	echo -e "${OVER}+ ${TICK} Create repository in ${__DIR}"
 
 	# Always return $?? Not sure this is correct
-    return $?
+	return $?
 } 2>/dev/null
 
 # We need to make sure the repos are up-to-date so we can effectively install
@@ -294,8 +294,8 @@ update_repo() {
 	# delete everything in it so git can clone into it
 	#rm -rf ${__DIR}/*
 	# Stash any local commits as they conflict with our working code
-    #git stash --all --quiet &> /dev/null || true # Okay for stash failure
-    #git clean --quiet --force -d || true # Okay for already clean directory
+	#git stash --all --quiet &> /dev/null || true # Okay for stash failure
+	#git clean --quiet --force -d || true # Okay for already clean directory
 	#git checkout ginavbs || true
 
 	git add . || true
@@ -305,7 +305,7 @@ update_repo() {
 	git fetch origin || true
 
 	# Pull from and merge with remote repository
-    git pull --force \
+	git pull --force \
 			 --quiet \
 			 --no-edit \
 			 --strategy=recursive \
@@ -314,7 +314,7 @@ update_repo() {
 			 origin master \
 			 || true
 
-    # Push to remote repository
+	# Push to remote repository
 	git push --force \
 			 --quiet \
 			 --set-upstream \
@@ -369,11 +369,11 @@ error_handler(){
 	echo "+"
 
 	case $1 in
-	40)		echo "+ Bad Request: This function needs at least one Argument!";;
-	43)		echo "+ Permission Denied: Please try again as root!";;
-	44)		echo "+ Not Found: Username and Password not found!";;
-	51)  	echo "+ Not Implemented: Please read the Manual, fool!";;
-	*)  	echo "+ Internal Error: Shit happens! Something has gone wrong.";;
+	40)        echo "+ Bad Request: This function needs at least one Argument!";;
+	43)        echo "+ Permission Denied: Please try again as root!";;
+	44)        echo "+ Not Found: Username and Password not found!";;
+	51)      echo "+ Not Implemented: Please read the Manual, fool!";;
+	*)      echo "+ Internal Error: Shit happens! Something has gone wrong.";;
 	esac
 
 	echo "+"
@@ -418,26 +418,26 @@ main(){
 	set -o xtrace
 
 	# The optional parameters string starting with ':' for silent errors
-    local -r _OPTS=':r:i:s:dh-:'
+	local -r _OPTS=':r:i:s:dh-:'
 	local -r INVALID_OPTION=51
 	local -r INVALID_ARGUMENT=40
 
 	while builtin getopts -- ${_OPTS} opt "$@"; do
 		case ${opt} in
-		r)	REPOSITORY=${OPTARG}
+		r)    REPOSITORY=${OPTARG}
 		;;
-		i)	INTERVAL=${OPTARG}
+		i)    INTERVAL=${OPTARG}
 		;;
-		s)	SSHKEY=${OPTARG}
+		s)    SSHKEY=${OPTARG}
 		;;
-		d)	nuke_everything
+		d)    nuke_everything
 		;;
-		h)	manual
+		h)    manual
 			return $?
 		;;
-		:) 	required_argument ${OPTARG} ${INVALID_ARGUMENT}
+		:)     required_argument ${OPTARG} ${INVALID_ARGUMENT}
 		;;
-		*)	case "${OPTARG}" in
+		*)    case "${OPTARG}" in
 			repository=*)
 				REPOSITORY=${OPTARG#*=}
 			;;
