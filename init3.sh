@@ -144,6 +144,7 @@ EOS_string COOL_LINE <<-'EOS'
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EOS
 
+
 ######## FUNCTIONS #########
 # Functions that are part of the core functionality of GINAvbs
 #
@@ -234,7 +235,7 @@ install() {
 	fi
 
 	return $?
-} #2>/dev/null
+} 2>/dev/null
 
 make_temporary_log() {
 	# Create a random temporary file for the log
@@ -255,8 +256,8 @@ copy_to_install_log() {
 } 2>/dev/null
 
 is_repo() {
-	# Check if a folder is a git repository
-	if [[ -d "${__DIR}/.git" ]]; then
+	# Check if $1 is a git repository
+	if [[ -d "$1/.git" ]]; then
 		echo true
 	else
 		echo false
@@ -277,15 +278,9 @@ make_repo() {
 
 	git remote add origin ${REPOSITORY} || true
 
-	#git branch ginavbs || true
-
-	# Clone the repo and return the return code from this command
-	#git clone -q "${REPOSITORY}" "${__DIR}" &> /dev/null || return $?
-
 	# Show a colored message showing it's status
 	echo -e "${OVER}+ ${TICK} Create repository in ${__DIR}"
 
-	# Always return $?? Not sure this is correct
 	return $?
 } 2>/dev/null
 
@@ -294,12 +289,6 @@ update_repo() {
 	# Display the message and use the color table to preface the message with
 	# an "info" indicator
 	echo -ne "+ ${INFO} Update repository in ${__DIR}..."
-	# delete everything in it so git can clone into it
-	#rm -rf ${__DIR}/*
-	# Stash any local commits as they conflict with our working code
-	#git stash --all --quiet &> /dev/null || true # Okay for stash failure
-	#git clean --quiet --force -d || true # Okay for already clean directory
-	#git checkout ginavbs || true
 
 	git add . || true
 	git commit -m "$(date) GINA init (init.sh)" || true
@@ -324,13 +313,9 @@ update_repo() {
 			 origin master \
 			 || true
 
-	# Clone the repo and return the return code from this command
-	#git clone -q "${REPOSITORY}" "${__DIR}" &> /dev/null || return $?
-
 	# Show a colored message showing it's status
 	echo -e "${OVER}+ ${TICK} Update repository in ${__DIR}"
 
-	# Always return $?? Not sure this is correct
 	return $?
 } 2>/dev/null
 
@@ -513,7 +498,7 @@ main(){
 	# Install packages used by this installation script
 	install __GINA_DEPS[@]
 
-	if ! $(is_repo) || ! [[ $(ls -A "${__DIR}" 2>/dev/null) ]]; then
+	if ! $(is_repo "${__DIR}") || ! [[ $(ls -A "${__DIR}" 2>/dev/null) ]]; then
 		make_repo
 	fi
 
