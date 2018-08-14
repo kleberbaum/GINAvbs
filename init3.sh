@@ -384,7 +384,7 @@ exit_handler(){
 	echo -e "+"
 	echo -e "${COL_LIGHT_RED}${COOL_LINE}"
 	echo -e "+"
-	error_handler
+	error_handler $?
 	echo -e "+"
 	echo -e "${COOL_LINE}"
 	exit $?
