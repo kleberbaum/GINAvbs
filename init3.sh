@@ -234,7 +234,7 @@ install() {
 	fi
 
 	return $?
-} 2>/dev/null
+} #2>/dev/null
 
 make_temporary_log() {
 	# Create a random temporary file for the log
