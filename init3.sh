@@ -23,9 +23,9 @@ set -o nounset  # Exposes unset variables
 
 
 #### SPECIAL FUNCTIONS #####
-# Functions that with the purpose of making coding more convinient and
+# Functions with the purpose of making coding more convinient and
 # debugging a bit easier.
-# Do not missunderstand "SPECIAL FUNCTIONS" as a test function.
+# Do not missunderstand "SPECIAL FUNCTIONS" as test functions.
 #
 # NOTE: SPECIAL FUNCTIONS start with three CAPS letter.
 #
@@ -40,7 +40,7 @@ EOS_string(){
 
 ######## GLOBAL VARIABLES AND ENVIRONMENT VARIABLES #########
 # For better maintainability, we define all global variables at the top.
-# This allows us to make changes at with their defaults
+# This allows us to make changes at their defaults
 # in one place and lowers the risk of dumb bugs.
 #
 # GLOBAL variables are all, written in CAPS
@@ -82,7 +82,7 @@ COL_NC='\e[0m' # default color
 
 COL_LIGHT_GREEN='\e[1;32m' # green
 COL_LIGHT_RED='\e[1;31m' # red
-COL_LIGHT_MAGENTA='\e[1;95m' # MAGENTA
+COL_LIGHT_MAGENTA='\e[1;95m' # magenta
 
 TICK="[${COL_LIGHT_GREEN}✓${COL_NC}]" # green thick
 CROSS="[${COL_LIGHT_RED}✗${COL_NC}]" # red cross
@@ -285,8 +285,7 @@ make_repo() {
 	return $?
 } 2>/dev/null
 
-# We need to make sure the repos are up-to-date so we can effectively install
-# and clean out the directory if it exists for git to clone into
+
 update_repo() {
 	# Display the message and use the color table to preface the message with
 	# an "info" indicator
@@ -369,11 +368,11 @@ error_handler(){
 	echo "+"
 
 	case $1 in
-	40)        echo "+ Bad Request: This function needs at least one Argument!";;
-	43)        echo "+ Permission Denied: Please try again as root!";;
-	44)        echo "+ Not Found: Username and Password not found!";;
-	51)      echo "+ Not Implemented: Please read the Manual, fool!";;
-	*)      echo "+ Internal Error: Shit happens! Something has gone wrong.";;
+	40) echo "+ Bad Request: This function needs at least one Argument!";;
+	43) echo "+ Permission Denied: Please try again as root!";;
+	44) echo "+ Not Found: Username and Password not found!";;
+	51)	echo "+ Not Implemented: Please read the Manual, fool!";;
+	*)  echo "+ Internal Error: Shit happens! Something has gone wrong.";;
 	esac
 
 	echo "+"
@@ -519,6 +518,7 @@ main(){
 	return $?
 }
 
+# traps everything
 trap exit_handler 0 1 2 3 13 15 # EXIT HUP INT QUIT PIPE TERM
 
 make_temporary_log
