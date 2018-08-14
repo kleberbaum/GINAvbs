@@ -121,6 +121,8 @@ EOS
 
 # Manual, learn more on our github site
 EOS_string MANPAGE <<-'EOS'
++ # Manual:
++
 + # -e --export "exports to a remote repository"
 + # -i --import "imports from a remote repository"
 + # -s --sshkey "deploys a given sshkey"
@@ -357,37 +359,46 @@ invalid_option(){
 } 2>/dev/null
 
 error_handler(){
+
+	echo "+ # ERROR:"
+	echo "+"
+
 	case $1 in
-	'400')	echo "+ Bad Request: This function needs at least one Argument!";;
-	'404')	echo "+ Not Found:";;
-	'403')	echo "+ Permission Denied: Please try again as root!";;
-	'501')  echo "+ Not Implemented: Please read the Manual, fool!";;
+	40)		echo "+ Bad Request: This function needs at least one Argument!";;
+	43)		echo "+ Permission Denied: Please try again as root!";;
+	44)		echo "+ Not Found: Username and Password not found!";;
+	51)  	echo "+ Not Implemented: Please read the Manual, fool!";;
 	*)  	echo "+ Internal Error: Shit happens! Something has gone wrong.";;
 	esac
 
+	echo "+"
+	echo "+ error_code $1"
+
+	return $?
 } 2>/dev/null
 
 exit_handler(){
 	# Copy the temp log file into final log location for storage
 	#copy_to_install_log # TODO logging still doesn't working like expected
+	local error_code=$?
 
-	if [[ $? == 0 ]]; then
+	if [[ ${error_code} == 0 ]]; then
 		echo -e "+"
 		echo -e "${COL_LIGHT_MAGENTA}${COOL_LINE}"
 		echo -e "+"
 		echo "+ Thanks for using GINAvbs"
 		echo -e "+"
 		echo -e "${COOL_LINE}"
-		return $?;
+		return ${error_code};
 	fi
 
 	echo -e "+"
 	echo -e "${COL_LIGHT_RED}${COOL_LINE}"
 	echo -e "+"
-	error_handler $?
+	error_handler ${error_code}
 	echo -e "+"
 	echo -e "${COOL_LINE}"
-	exit $?
+	exit ${error_code}
 } 2>/dev/null
 
 ######## ENTRYPOINT #########
@@ -403,8 +414,8 @@ main(){
 
 	# The optional parameters string starting with ':' for silent errors
     local -r _OPTS=':r:i:s:dh-:'
-	local -r INVALID_OPTION=501
-	local -r INVALID_ARGUMENT=400
+	local -r INVALID_OPTION=51
+	local -r INVALID_ARGUMENT=40
 
 	while builtin getopts -- ${_OPTS} opt "$@"; do
 		case ${opt} in
@@ -486,7 +497,7 @@ main(){
 	PASSWORD="${_tmp#*:}"
 
 	if [[ ${USER} == ${PASSWORD} ]] && ! [[ ${SSHKEY} ]]; then
-		return 5
+		return 44
 	fi
 
 	# Install packages used by this installation script
