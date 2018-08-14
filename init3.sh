@@ -123,10 +123,10 @@ EOS
 EOS_string MANPAGE <<-'EOS'
 + # Manual:
 +
-+ # -e --export "exports to a remote repository"
-+ # -i --import "imports from a remote repository"
++ # -r --remote "exports to a remote repository"
 + # -s --sshkey "deploys a given sshkey"
 + # -d --delete "deletes local repo"
++ # -h --help "shows man page"
 +
 + # really hope that helps you
 +
@@ -177,7 +177,12 @@ install() {
 			# Placing cron job
 			cat <<-'EOF' > /etc/periodic/${INTERVAL}/ginavbs.sh
 				#!/usr/bin/env bash
+				echo ""
 
+				# Terminate on errors and output everything to >&2
+				set -xe
+
+				# Commit changes to remote repository
 				git add .
 				git commit -m "$(date) automated backup (ginavbs.sh)"
 				git push --force origin master
@@ -484,19 +489,21 @@ main(){
 
 	local _tmp=""
 
+	# Strip protocol prefix
 	REPOSITORY="${REPOSITORY#*://}"
-
+	# Strip link
 	_tmp="${REPOSITORY%%/*}"
-
+	# Get host
 	HOST="${_tmp#*@}"
-
+	# Strip host
 	_tmp="${_tmp%%@*}"
-
+	# Get username
 	USER="${_tmp%%:*}"
-
+	# Get password
 	PASSWORD="${_tmp#*:}"
 
 	if [[ ${USER} == ${PASSWORD} ]] && ! [[ ${SSHKEY} ]]; then
+		# Check if no username or password and/or sshkey was added
 		return 44
 	fi
 
