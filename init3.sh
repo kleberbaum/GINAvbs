@@ -8,14 +8,14 @@
 # This file is copyright under the latest version of the EUPL.
 # Please see LICENSE file for your rights under this license.
 
-# This Programm is initialy designt for the Erebos Network.
-# If you are neider of those make sure be warned thet you use, copie and/or
+# This program is initially designed for the Erebos Network.
+# If you are neither of those make sure be warned that you use, copy and/or
 # modify at your own risk.
 
-# Futhurmore it's not recommended to use GINAvbs with another shell than
+# Futhermore it's not recommended to use GINAvbs with another shell than
 # GNU bash version 4.4
 
-# It is highly recomended to use set -eEuo pipefail for ervery setup script
+# It is highly recommended to use set -eEuo pipefail for every setup script
 set -o errexit  # Used to exit upon error, avoiding cascading errors
 set -o errtrace # Activate traps to catch errors on exit
 set -o pipefail # Unveils hidden failures
@@ -23,24 +23,24 @@ set -o nounset  # Exposes unset variables
 
 
 #### SPECIAL FUNCTIONS #####
-# Functions that serve the purpos of makeing codeing more convinient and
+# Functions that with the purpose of making coding more convinient and
 # debugging a bit easier.
 # Do not missunderstand "SPECIAL FUNCTIONS" as a test function.
 #
 # NOTE: SPECIAL FUNCTIONS start with three CAPS letter.
 #
 # IF YOU ARE AWARE OF A BETTER FORM OF NAMING FEEL FREE TO OPEN A ISSUE
-# OTHERWISE PLEASE USE THIS AS A GUIDLINE FOR ANY COMMIT.
+# OTHERWISE PLEASE USE THIS AS A GUIDELINE FOR ANY COMMIT.
 
 EOS_string(){
 	# allows to store EOFs in strings
 	IFS=$'\n' read -r -d '' $1 || true;
-	return 0
+	return $?
 } 2>/dev/null
 
 ######## GLOBAL VARIABLES AND ENVIRONMENT VARIABLES #########
 # For better maintainability, we define all global variables at the top.
-# This allows us to make changes at with thei defaults
+# This allows us to make changes at with their defaults
 # in one place and lowers the risk of dumb bugs.
 #
 # GLOBAL variables are all, written in CAPS
@@ -49,7 +49,7 @@ EOS_string(){
 # NOTE: Variables starting with double underscore are readonly
 #
 # IF YOU ARE AWARE OF A BETTER FORM OF NAMING FEEL FREE TO OPEN A ISSUE
-# OTHERWISE PLEASE USE THIS AS A GUIDLINE FOR ANY COMMIT
+# OTHERWISE PLEASE USE THIS AS A GUIDELINE FOR ANY COMMIT
 
 source /etc/os-release # source os release environment variables
 
@@ -113,7 +113,7 @@ EOS_string LICENSE <<-'EOS'
 + # If you are neider of those make sure be warned thet you use, copie and/or
 + # modify at your own risk.
 +
-+ # Futhurmore it's not recommended to use GINAvbs with another shell than
++ # Futhermore it's not recommended to use GINAvbs with another shell than
 + # GNU bash version 4.4
 +
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -131,7 +131,7 @@ EOS_string MANPAGE <<-'EOS'
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EOS
 
-# This line has decorative purbos only
+# This line has decorative purpose only
 EOS_string COOL_LINE <<-'EOS'
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EOS
@@ -142,18 +142,16 @@ EOS
 # FUNCTIONS are all, written in lowercase
 #
 # IF YOU ARE AWARE OF A BETTER FORM OF NAMING FEEL FREE TO OPEN A ISSUE
-# OTHERWISE PLEASE USE THIS AS A GUIDLINE FOR ANY COMMIT
-
-# normal funcrions
+# OTHERWISE PLEASE USE THIS AS A GUIDELINE FOR ANY COMMIT
 
 install() {
     # Install packages passed in via argument array
     declare -a _argArray1=(${!1})
     declare -a _installArray=("")
 
-    # Debian based package install - debconf will download the entire package list
-    # so we just create an array of packages not currently installed to cut down on the
-    # amount of download traffic.
+    # Debian based package install - debconf will download the entire package
+	# list so we just create an array of packages not currently installed to
+	# cut down on the amount of download traffic.
 
 	# For each package,
 	for i in "${_argArray1[@]}"; do
@@ -169,11 +167,12 @@ install() {
 	if [[ ${_installArray[@]} ]]; then
 		case ${__DISTRO} in
 		'alpine')
-			# installing
+			# Installing Packages
 	    	apk add --force ${_installArray[@]}
-			# and cleaning
+			# Cleaning cached files
 			rm -rf /var/cache/apk/* /var/cache/distfiles/*
 
+			# Placing cron job
 			cat <<-'EOF' > /etc/periodic/${INTERVAL}/ginavbs.sh
 				#!/usr/bin/env bash
 
@@ -187,53 +186,53 @@ install() {
 			exec "/usr/sbin/crond" "-f" &
 		;;
 		'arch'|'manjaro')
-			# installing if started as root
+			# Installing Packages if started as root
 			if [[ $(pacman -S --noconfirm ${_installArray[@]}) ]]; then
-				# and cleaning
+				# Cleaning cached files
 				pacman -Scc --noconfirm
 
-			# installing if sudo is installed
+			# Installing if sudo is installed
 			elif [[ $(sudo pacman -S --noconfirm ${_installArray[@]}) ]]; then
-				# and cleaning
+				# Cleaning cached files
 				sudo pacman -Scc --noconfirm
 
-			# try again as root
+			# Try again as root
 			else
-				echo "${INFO} retriy as root again"
+				echo "${INFO} retry as root again"
 			fi
 		;;
 		'debian'|'ubuntu'|'mint'|'kali')
-			# installing if started as root
+			# Installing Packages if started as root
 			if [[ $(apt-get install ${_installArray[@]} -y) ]]; then
-				# and cleaning
+				# Cleaning cached files
 				apt-get clean -y
 
-			# installing if sudo is installed
+			# Installing if sudo is installed
 			elif [[ $(sudo apt-get install ${_installArray[@]} -y) ]]; then
-				# and cleaning
+				# Cleaning cached files
 				sudo apt-get clean -y
 
-			# try again as root
+			# Try again as root
 			else
-				echo "${INFO} retriy as root again"
+				echo "${INFO} retry as root again"
 			fi
 			;;
 			*) return 1;;
 			esac
 	fi
 
-	return 0
+	return $?
 }
 
 make_temporary_log() {
     # Create a random temporary file for the log
     TEMPLOG=$(mktemp /tmp/gina_temp.XXXXXX)
     # Open handle 3 for templog
-    # https://stackoverflow.com/questions/18460186/writing-outputs-to-log-file-and-console
     exec 3>"$TEMPLOG"
     # Delete templog, but allow for addressing via file handle
-    # This lets us write to the log without having a temporary file on the drive, which
-    # is meant to be a security measure so there is not a lingering file on the drive during the install process
+    # This lets us write to the log without having a temporary file on
+	# the drive, which is meant to be a security measure so there is not a
+	# lingering file on the drive during the install process
     rm -f "$TEMPLOG"
 } 2>/dev/null
 
@@ -251,12 +250,13 @@ is_repo() {
 		echo false
 	fi
 
-	return 0
+	return $?
 }
 
 # A function to clone a repo
 make_repo() {
-    # Display the message and use the color table to preface the message with an "info" indicator
+    # Display the message and use the color table to preface the message
+	# with an "info" indicator
     echo -ne "+ ${INFO} Create repository in ${__DIR}..."
 
 	# delete everything in it so git can clone into it
@@ -270,15 +270,19 @@ make_repo() {
 
     # Clone the repo and return the return code from this command
     #git clone -q "${REPOSITORY}" "${__DIR}" &> /dev/null || return $?
+
     # Show a colored message showing it's status
     echo -e "${OVER}+ ${TICK} Create repository in ${__DIR}"
-    # Always return 0? Not sure this is correct
-    return 0
+
+	# Always return $?? Not sure this is correct
+    return $?
 } 2>/dev/null
 
-# We need to make sure the repos are up-to-date so we can effectively install Clean out the directory if it exists for git to clone into
+# We need to make sure the repos are up-to-date so we can effectively install
+# and clean out the directory if it exists for git to clone into
 update_repo() {
-	# Display the message and use the color table to preface the message with an "info" indicator
+	# Display the message and use the color table to preface the message with
+	# an "info" indicator
 	echo -ne "+ ${INFO} Update repository in ${__DIR}..."
 	# delete everything in it so git can clone into it
 	#rm -rf ${__DIR}/*
@@ -290,9 +294,10 @@ update_repo() {
 	git add . || true
 	git commit -m "$(date) GINA init (init.sh)" || true
 
-	# Pull the latest commits
+	# Pull the latest commits from master
 	git fetch origin || true
 
+	# Pull from and merge with remote repository
     git pull --force \
 			 --quiet \
 			 --no-edit \
@@ -302,7 +307,7 @@ update_repo() {
 			 origin master \
 			 || true
 
-    # Show a completion message
+    # Push to remote repository
 	git push --force \
 			 --quiet \
 			 --set-upstream \
@@ -311,27 +316,32 @@ update_repo() {
 
 	# Clone the repo and return the return code from this command
 	#git clone -q "${REPOSITORY}" "${__DIR}" &> /dev/null || return $?
+
 	# Show a colored message showing it's status
 	echo -e "${OVER}+ ${TICK} Update repository in ${__DIR}"
-	# Always return 0? Not sure this is correct
-	return 0
+
+	# Always return $?? Not sure this is correct
+	return $?
 } 2>/dev/null
 
 nuke_everything() {
-	# I am pretty shure there is a better way
+	# I am pretty sure there is a better way
 	# pls don't push this button
 
 	north_korea_mode=enabled;
 
-	# welp, all local informations will be removed
+	# welp, all local informations will be destroyed
+	return $?
 } 2>/dev/null
 
 manual(){
+	# Prints manual
 	echo -e "+${COL_LIGHT_GREEN}"
 	echo -e "${COL_LIGHT_GREEN}${COOL_LINE}"
 	echo -e "+"
 	echo -e "${MANPAGE}"
 	echo -e "${COL_NC}+"
+	return $?
 } 2>/dev/null
 
 required_argument(){
@@ -346,27 +356,38 @@ invalid_option(){
 	return $2
 } 2>/dev/null
 
+error_handler(){
+	case $1 in
+	'400')	echo "+ Bad Request: This function needs at least one Argument!";;
+	'404')	echo "+ Not Found:";;
+	'403')	echo "+ Permission Denied: Please try again as root!";;
+	'501')  echo "+ Not Implemented: Please read the Manual, fool!";;
+	*)  	echo "+ Internal Error: Shit happens! Something has gone wrong.";;
+	esac
+
+} 2>/dev/null
+
 exit_handler(){
 	# Copy the temp log file into final log location for storage
-	#copy_to_install_log # TODO logging still doesnt working like expected
+	#copy_to_install_log # TODO logging still doesn't working like expected
 
 	if [[ $? == 0 ]]; then
 		echo -e "+"
 		echo -e "${COL_LIGHT_MAGENTA}${COOL_LINE}"
 		echo -e "+"
-		echo "+ Thanks for useing GINAvbs"
+		echo "+ Thanks for using GINAvbs"
 		echo -e "+"
 		echo -e "${COOL_LINE}"
-		return 0;
+		return $?;
 	fi
+
 	echo -e "+"
 	echo -e "${COL_LIGHT_RED}${COOL_LINE}"
 	echo -e "+"
-	echo "+ shit happens!"
-	echo "+ an error has occurred..."
+	error_handler
 	echo -e "+"
 	echo -e "${COOL_LINE}"
-	exit "${error_code}"
+	exit $?
 } 2>/dev/null
 
 ######## ENTRYPOINT #########
@@ -380,10 +401,10 @@ main(){
 
 	set -o xtrace
 
-	# the optional parameters string starting with ':' for silent errors snd h for help usage
+	# The optional parameters string starting with ':' for silent errors
     local -r _OPTS=':r:i:s:dh-:'
-	local -r INVALID_OPTION=2
-	local -r INVALID_ARGUMENT=3
+	local -r INVALID_OPTION=501
+	local -r INVALID_ARGUMENT=400
 
 	while builtin getopts -- ${_OPTS} opt "$@"; do
 		case ${opt} in
@@ -396,7 +417,7 @@ main(){
 		d)	nuke_everything
 		;;
 		h)	manual
-			return 0
+			return $?
 		;;
 		:) 	required_argument ${OPTARG} ${INVALID_ARGUMENT}
 		;;
@@ -434,6 +455,14 @@ main(){
 				fi
 				OPTIND=$(( ${OPTIND} + 1 ))
 			;;
+			delete)
+				nuke_everything
+				return $?
+			;;
+			help)
+				manual
+				return $?
+			;;
 			*)
 				invalid_option ${OPTARG} ${INVALID_OPTION}
 			;;
@@ -469,7 +498,7 @@ main(){
 
 	update_repo
 
-	return 0
+	return $?
 }
 
 trap exit_handler 0 1 2 3 13 15 # EXIT HUP INT QUIT PIPE TERM
