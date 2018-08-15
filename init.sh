@@ -56,7 +56,7 @@ source /etc/os-release # source os release environment variables
 
 # SYSTEM / USER VARIABLES
 readonly __DISTRO="${ID}" # get distro id from /etc/os-release
-readonly __DIR="$(pwd)" # workdir
+readonly __DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" # workdir
 readonly __FILE="${__DIR}/$(basename "${BASH_SOURCE[0]}")" # self
 readonly __BASE="$(basename ${__FILE})" # workdir/self
 readonly __ROOT="$(cd "$(dirname "${__DIR}")" && pwd)" # homedir
