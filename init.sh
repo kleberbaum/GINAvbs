@@ -247,6 +247,8 @@ make_temporary_log() {
 	# the drive, which is meant to be a security measure so there is not a
 	# lingering file on the drive during the install process
 	rm -f "$TEMPLOG"
+
+	return $?
 } 2>/dev/null
 
 copy_to_install_log() {
@@ -326,6 +328,7 @@ nuke_everything() {
 	north_korea_mode=enabled;
 
 	# welp, all local informations will be destroyed
+
 	return $?
 } 2>/dev/null
 
@@ -336,18 +339,21 @@ manual(){
 	echo -e "+"
 	echo -e "${MANPAGE}"
 	echo -e "${COL_NC}+"
+
 	return $?
 } 2>/dev/null
 
 required_argument(){
 	echo "required argument not found for option -$1" 1>/dev/null
 	manual
+
 	return $2
 } 2>/dev/null
 
 invalid_option(){
 	echo "required argument not found for option --$1" 1>/dev/null
 	manual
+
 	return $2
 } 2>/dev/null
 
@@ -382,6 +388,7 @@ exit_handler(){
 		echo "+ Thanks for using GINAvbs"
 		echo -e "+"
 		echo -e "${COOL_LINE}"
+
 		return ${error_code};
 	fi
 
@@ -391,6 +398,7 @@ exit_handler(){
 	error_handler ${error_code}
 	echo -e "+"
 	echo -e "${COOL_LINE}"
+
 	exit ${error_code}
 } 2>/dev/null
 
@@ -421,7 +429,7 @@ main(){
 		d)    nuke_everything
 		;;
 		h)    manual
-			return $?
+			  return $?
 		;;
 		:)     required_argument ${OPTARG} ${INVALID_ARGUMENT}
 		;;
