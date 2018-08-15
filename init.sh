@@ -130,6 +130,7 @@ EOS_string MANPAGE <<-'EOS'
 + # Manual:
 +
 + # -r --remote "exports to a remote repository"
++ # -i --interval "sets the interval of the backup to 15min/daily/hourly/monthly/weekly"
 + # -s --sshkey "deploys a given sshkey"
 + # -d --delete "deletes local repo"
 + # -h --help "shows man page"
