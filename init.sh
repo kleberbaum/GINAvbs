@@ -81,9 +81,9 @@ INTERVAL=${GINA_INTERVAL:-"weekly"}
 # Set some colors because without it ain't no fun
 COL_NC='\e[0m' # default color
 
-COL_LIGHT_GREEN='tput setaf 2' # green
-COL_LIGHT_RED='tput setaf 1' # red
-COL_LIGHT_MAGENTA='tput setaf 1' # magenta
+COL_LIGHT_GREEN='$(tput setaf 2)' # green
+COL_LIGHT_RED='$(tput setaf 1)' # red
+COL_LIGHT_MAGENTA='$(tput setaf 5)' # magenta
 
 TICK="[${COL_LIGHT_GREEN}✓${COL_NC}]" # green thick
 CROSS="[${COL_LIGHT_RED}✗${COL_NC}]" # red cross
