@@ -241,7 +241,7 @@ install() {
 	esac
 
 	return $?
-} #2>/dev/null
+} 2>/dev/null
 
 make_temporary_log() {
 	# Create a random temporary file for the log
@@ -290,10 +290,10 @@ make_repo() {
 	git remote add origin ${REPOSITORY} || true
 
 	# Show a colored message showing it's status
-	echo -e "${OVER}+ ${TICK} Create repository in ${__DIR}"
+	echo -e "+ [${TICK}] Create repository in ${__DIR}"
 
 	return $?
-} #2>/dev/null
+} 2>/dev/null
 
 
 update_repo() {
@@ -325,10 +325,10 @@ update_repo() {
 			 || true
 
 	# Show a colored message showing it's status
-	echo -e "${OVER}+ ${TICK} Update repository in ${__DIR}"
+	echo -e "+ [${TICK}] Update repository in ${__DIR}"
 
 	return $?
-} #2>/dev/null
+} 2>/dev/null
 
 nuke_everything() {
 	# I am pretty sure there is a better way
