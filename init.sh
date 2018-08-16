@@ -487,9 +487,9 @@ main(){
 	local _tmp=""
 
 	# Strip protocol prefix
-	REPOSITORY="${REPOSITORY#*://}"
+	_tmp="${REPOSITORY#*://}"
 	# Strip link
-	_tmp="${REPOSITORY%%/*}"
+	_tmp="${_tmp%%/*}"
 	# Get host
 	HOST="${_tmp#*@}"
 	# Strip host
