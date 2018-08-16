@@ -419,7 +419,6 @@ exit_handler(){
 ######## ENTRYPOINT #########
 
 main(){
-	PS1='\e[33;1m\u@\h: \e[31m\W\e[0m\$ '
 	echo -e "${COL_LIGHT_MAGENTA}${LOGO}"
 	echo -e "${COL_LIGHT_GREEN}+"
 	echo -e "${COL_LIGHT_GREEN}${LICENSE}"
