@@ -166,9 +166,9 @@ install() {
 	for i in "${_argArray1[@]}"; do
 		echo -ne "+ ${INFO} Checking for ${i}..."
 		if [[ $(which "${i}" 2>/dev/null) ]]; then
-			echo -e "${OVER}+ ${TICK} Checking for ${i} (is installed)"
+			echo -e "+ [${TICK}] Checking for ${i} (is installed)"
 		else
-			echo -e "${OVER}+ ${INFO} Checking for ${i} (will be installed)"
+			echo -e "+ ${INFO} Checking for ${i} (will be installed)"
 			_installArray+=("${i}")
 		fi 2>/dev/null
 	done
@@ -180,6 +180,7 @@ install() {
 			apk add --force ${_installArray[@]}
 			# Cleaning cached files
 			rm -rf /var/cache/apk/* /var/cache/distfiles/*
+			echo -e "+ [${TICK}] All dependencies are now installed"
 		fi
 
 		# Placing cron job
@@ -214,8 +215,10 @@ install() {
 
 			# Try again as root
 			else
-				echo "${INFO} retry as root again"
+				echo "+ ${INFO} retry as root again"
+				return 43
 			fi
+			echo -e "+ [${TICK}] All dependencies are now installed"
 		fi
 
 	;;
@@ -233,8 +236,10 @@ install() {
 
 			# Try again as root
 			else
-				echo "${INFO} retry as root again"
+				echo "+ ${INFO} retry as root again"
+				return 43
 			fi
+			echo -e "+ [${TICK}] All dependencies are now installed"
 		fi
 		;;
 		*) return 1;;
