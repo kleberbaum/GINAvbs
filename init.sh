@@ -34,7 +34,7 @@ set -o nounset  # Exposes unset variables
 
 EOS_string(){
 	# allows to store EOFs in strings
-	IFS=$'\n' read -r -d '' $1 || true;
+	read -r -d '' $1 || true;
 	return $?
 } 2>/dev/null
 
