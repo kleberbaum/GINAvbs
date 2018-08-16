@@ -409,10 +409,9 @@ exit_handler(){
 ######## ENTRYPOINT #########
 
 main(){
-	echo -e "${COL_LIGHT_MAGENTA}"
-	echo -e "${LOGO}"
+	echo -e "${COL_LIGHT_MAGENTA}${LOGO}"
 	echo -e "${COL_LIGHT_GREEN}+"
-	echo -e "${LICENSE}"
+	echo -e "${COL_LIGHT_GREEN}${LICENSE}"
 	echo -e "${COL_NC}+"
 
 	set -o xtrace
