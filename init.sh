@@ -285,7 +285,7 @@ make_repo() {
 	echo -e "${OVER}+ ${TICK} Create repository in ${__DIR}"
 
 	return $?
-} 2>/dev/null
+} #2>/dev/null
 
 
 update_repo() {
@@ -320,7 +320,7 @@ update_repo() {
 	echo -e "${OVER}+ ${TICK} Update repository in ${__DIR}"
 
 	return $?
-} 2>/dev/null
+} #2>/dev/null
 
 nuke_everything() {
 	# I am pretty sure there is a better way
