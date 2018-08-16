@@ -81,9 +81,9 @@ INTERVAL=${GINA_INTERVAL:-"weekly"}
 # Set some colors because without it ain't no fun
 COL_NC='\e[0m' # default color
 
-COL_LIGHT_GREEN=$(tput setaf 2) # green
-COL_LIGHT_RED=$(tput setaf 1) # red
-COL_LIGHT_MAGENTA=$(tput setaf 5) # magenta
+COL_LIGHT_GREEN='\e[1;32m' # green
+COL_LIGHT_RED='\e[1;31m' # red
+COL_LIGHT_MAGENTA='\e[1;95m' # magenta
 
 TICK="[${COL_LIGHT_GREEN}✓${COL_NC}]" # green thick
 CROSS="[${COL_LIGHT_RED}✗${COL_NC}]" # red cross
@@ -419,7 +419,7 @@ exit_handler(){
 ######## ENTRYPOINT #########
 
 main(){
-	echo -e "${COL_LIGHT_MAGENTA}${LOGO}"
+	echo -e "\[\033[32m\]${LOGO}\[\033[m\]"
 	echo -e "${COL_LIGHT_GREEN}+"
 	echo -e "${COL_LIGHT_GREEN}${LICENSE}"
 	echo -e "${COL_NC}+"
