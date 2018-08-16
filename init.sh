@@ -173,33 +173,35 @@ install() {
 		fi 2>/dev/null
 	done
 
-	if [[ ${_installArray[@]} ]]; then
-		case ${__DISTRO} in
-		'alpine')
+	case ${__DISTRO} in
+	'alpine')
+		if [[ ${_installArray[@]} ]]; then
 			# Installing Packages
 			apk add --force ${_installArray[@]}
 			# Cleaning cached files
 			rm -rf /var/cache/apk/* /var/cache/distfiles/*
+		fi
 
-			# Placing cron job
-			cat <<-'EOF' > /etc/periodic/${INTERVAL}/ginavbs.sh
-				#!/usr/bin/env bash
-				echo ""
+		# Placing cron job
+		cat <<-'EOF' > /etc/periodic/${INTERVAL}/ginavbs.sh
+			#!/usr/bin/env bash
+			echo ""
 
-				# Terminate on errors and output everything to >&2
-				set -xe
+			# Terminate on errors and output everything to >&2
+			set -xe
 
-				# Commit changes to remote repository
-				git add .
-				git commit -m "$(date) automated backup (ginavbs.sh)"
-				git push --force origin master
-			EOF
+			# Commit changes to remote repository
+			git add .
+			git commit -m "$(date) automated backup (ginavbs.sh)"
+			git push --force origin master
+		EOF
 
-			chmod +x /etc/periodic/${INTERVAL}/ginavbs.sh
+		chmod +x /etc/periodic/${INTERVAL}/ginavbs.sh
 
-			exec "/usr/sbin/crond" "-f" &
-		;;
-		'arch'|'manjaro')
+		exec "/usr/sbin/crond" "-f" &
+	;;
+	'arch'|'manjaro')
+		if [[ ${_installArray[@]} ]]; then
 			# Installing Packages if started as root
 			if [[ $(pacman -S --noconfirm ${_installArray[@]}) ]]; then
 				# Cleaning cached files
@@ -214,8 +216,11 @@ install() {
 			else
 				echo "${INFO} retry as root again"
 			fi
-		;;
-		'debian'|'ubuntu'|'mint'|'kali')
+		fi
+
+	;;
+	'debian'|'ubuntu'|'mint'|'kali')
+		if [[ ${_installArray[@]} ]]; then
 			# Installing Packages if started as root
 			if [[ $(apt-get install ${_installArray[@]} -y) ]]; then
 				# Cleaning cached files
@@ -230,10 +235,10 @@ install() {
 			else
 				echo "${INFO} retry as root again"
 			fi
-			;;
-			*) return 1;;
-			esac
-	fi
+		fi
+		;;
+		*) return 1;;
+	esac
 
 	return $?
 } 2>/dev/null
