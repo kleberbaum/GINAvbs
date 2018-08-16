@@ -279,6 +279,9 @@ make_repo() {
 
 	git init || true
 
+	git config --global user.name "GINAvbs"
+	git config --global user.email "ginavbs@erebos.xyz"
+
 	git remote add origin ${REPOSITORY} || true
 
 	# Show a colored message showing it's status
