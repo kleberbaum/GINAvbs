@@ -34,7 +34,7 @@ set -o nounset  # Exposes unset variables
 
 EOS_string(){
 	# allows to store EOFs in strings
-	read -r -d '' $1 || true;
+	IFS=$'\n' read -r -d '' $1 || true;
 	return $?
 } 2>/dev/null
 
@@ -81,9 +81,9 @@ INTERVAL=${GINA_INTERVAL:-"weekly"}
 # Set some colors because without it ain't no fun
 COL_NC='\e[0m' # default color
 
-COL_LIGHT_GREEN='\e[1;32m' # green
-COL_LIGHT_RED='\e[1;31m' # red
-COL_LIGHT_MAGENTA='\e[1;95m' # magenta
+COL_LIGHT_GREEN='tput setaf 2' # green
+COL_LIGHT_RED='tput setaf 1' # red
+COL_LIGHT_MAGENTA='tput setaf 1' # magenta
 
 TICK="[${COL_LIGHT_GREEN}✓${COL_NC}]" # green thick
 CROSS="[${COL_LIGHT_RED}✗${COL_NC}]" # red cross
