@@ -184,13 +184,18 @@ install() {
 		fi
 
 		# Placing cron job
-		cat <<-'EOF' > /etc/periodic/${INTERVAL}/ginavbs.sh
+		cat <<-EOF > /etc/periodic/${INTERVAL}/ginavbs.sh
 			#!/usr/bin/env bash
 			echo ""
 
 			# Terminate on errors and output everything to >&2
 			set -xe
 
+			cd ${__DIR}
+			
+		EOF
+
+		cat <<-'EOF' >> /etc/periodic/${INTERVAL}/ginavbs.sh
 			# Commit changes to remote repository
 			git add .
 			git commit -m "$(date) automated backup (ginavbs.sh)"
