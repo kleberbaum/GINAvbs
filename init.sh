@@ -69,6 +69,8 @@ readonly __GINA_LOGS="${__DIR}/install.log"
 
 # SETUP VARIABLES
 # Define and set default for enviroment variables
+SQL_MODE=${SQL_MODE:-false}
+
 REPOSITORY=${GINA_REPOSITORY:-""}
 SSHKEY=${GINA_SSHKEY:-""}
 HOST=${GINA_HOST:-""}
@@ -131,7 +133,8 @@ EOS_string MANPAGE <<-'EOS'
 +
 + # -r --remote "exports to a remote repository"
 + # -i --interval "sets the interval of the backup to 15min/daily/hourly/monthly/weekly"
-+ # -s --sshkey "deploys a given sshkey"
++ # -k --sshkey "deploys a given sshkey"
++ # -s --sql "activates sql mode"
 + # -d --delete "deletes local repo"
 + # -h --help "shows man page"
 +
@@ -195,12 +198,21 @@ install() {
 
 		EOF
 
-		cat <<-'EOF' >> /etc/periodic/${INTERVAL}/ginavbs.sh
-			# Commit changes to remote repository
-			git add .
-			git commit -m "$(date) automated backup (ginavbs.sh)"
-			git push --force origin master
-		EOF
+		if SQL_MODE; then
+			cat <<-'EOF' >> /etc/periodic/${INTERVAL}/ginavbs.sh
+				# Commit changes to remote repository
+				git add .
+				git commit -m "$(date) automated backup (ginavbs.sh)"
+				git push --force origin master
+			EOF
+		else
+			cat <<-'EOF' >> /etc/periodic/${INTERVAL}/ginavbs.sh
+				# Commit changes to remote repository
+				git add .
+				git commit -m "$(date) automated backup (ginavbs.sh)"
+				git push --force origin master
+			EOF
+		fi
 
 		chmod +x /etc/periodic/${INTERVAL}/ginavbs.sh
 
@@ -442,14 +454,16 @@ main(){
 		;;
 		i)    INTERVAL=${OPTARG}
 		;;
-		s)    SSHKEY=${OPTARG}
+		k)    SSHKEY=${OPTARG}
+		;;
+		s)    SQL_MODE=true
 		;;
 		d)    nuke_everything
 		;;
 		h)    manual
 			  return $?
 		;;
-		:)     required_argument ${OPTARG} ${INVALID_ARGUMENT}
+		:)    required_argument ${OPTARG} ${INVALID_ARGUMENT}
 		;;
 		*)    case "${OPTARG}" in
 			repository=*)
@@ -484,6 +498,9 @@ main(){
 					required_argument ${OPTARG} ${INVALID_ARGUMENT}
 				fi
 				OPTIND=$(( ${OPTIND} + 1 ))
+			;;
+			sql)
+				SQL_MODE=true
 			;;
 			delete)
 				nuke_everything
