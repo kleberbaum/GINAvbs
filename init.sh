@@ -251,7 +251,7 @@ install() {
 	esac
 
 	return $?
-} #2>/dev/null
+} 2>/dev/null
 
 make_temporary_log() {
 	# Create a random temporary file for the log
@@ -425,7 +425,7 @@ exit_handler(){
 
 main(){
 	echo -e "${COL_LIGHT_MAGENTA}${LOGO}"
-	echo -e "${COL_LIGHT_GREEN}+"
+	echo -e "+"
 	echo -e "${COL_LIGHT_GREEN}${LICENSE}"
 	echo -e "${COL_NC}+"
 
