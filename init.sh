@@ -201,6 +201,8 @@ install() {
 		if SQL_MODE; then
 			cat <<-'EOF' >> /etc/periodic/${INTERVAL}/ginavbs.sh
 				# Commit changes to remote repository
+				git pull
+				mysqldump --user=root --lock-tables --all-databases > ./dbs.sql
 				git add .
 				git commit -m "$(date) automated backup (ginavbs.sh)"
 				git push --force origin master
@@ -208,6 +210,7 @@ install() {
 		else
 			cat <<-'EOF' >> /etc/periodic/${INTERVAL}/ginavbs.sh
 				# Commit changes to remote repository
+				git pull
 				git add .
 				git commit -m "$(date) automated backup (ginavbs.sh)"
 				git push --force origin master
