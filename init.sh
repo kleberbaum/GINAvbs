@@ -111,19 +111,19 @@ EOS
 EOS_string LICENSE <<-'EOS'
 
 
-+# GINAvbs: A backup solution using Github
-+# (c) 2016-2018 GINAvbs, LLC (https://erebos.xyz/)
-+# Easy to use backups for configurations, logs and sql files.
++ # GINAvbs: A backup solution using Github
++ # (c) 2016-2018 GINAvbs, LLC (https://erebos.xyz/)
++ # Easy to use backups for configurations, logs and sql files.
 
-+# This file is copyright protected under the latest version of the EUPL.
-+# Please read the LICENSE file for further information.
++ # This file is copyright protected under the latest version of the EUPL.
++ # Please read the LICENSE file for further information.
 
-+# This program was initially designed for the Erebos Network.
-+# If you are neither of those make sure be warned that you use, copy and/or
-+# modify at your own risk.
++ # This program was initially designed for the Erebos Network.
++ # If you are neither of those make sure be warned that you use, copy and/or
++ # modify at your own risk.
 
-+# Futhermore it's not recommended to use GINAvbs with a different shell than
-+# GNU bash version 4.4
++ # Futhermore it's not recommended to use GINAvbs with a different shell than
++ # GNU bash version 4.4
 +
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EOS
