@@ -187,7 +187,7 @@ install() {
 		fi
 
 		# Placing cron job
-		cat <<-EOF > /etc/periodic/${INTERVAL}/ginavbs.sh
+		cat <<-EOF > /etc/periodic/${INTERVAL}/ginavbs
 			#!/usr/bin/env bash
 			echo ""
 
@@ -199,25 +199,25 @@ install() {
 		EOF
 
 		if SQL_MODE; then
-			cat <<-'EOF' >> /etc/periodic/${INTERVAL}/ginavbs.sh
+			cat <<-'EOF' >> /etc/periodic/${INTERVAL}/ginavbs
 				# Commit changes to remote repository
 				git pull
 				mysqldump --user=root --lock-tables --all-databases > ./dbs.sql
 				git add .
-				git commit -m "$(date) automated backup (ginavbs.sh)"
+				git commit -m "$(date) automated backup (ginavbs)"
 				git push --force origin master
 			EOF
 		else
-			cat <<-'EOF' >> /etc/periodic/${INTERVAL}/ginavbs.sh
+			cat <<-'EOF' >> /etc/periodic/${INTERVAL}/ginavbs
 				# Commit changes to remote repository
 				git pull
 				git add .
-				git commit -m "$(date) automated backup (ginavbs.sh)"
+				git commit -m "$(date) automated backup (ginavbs)"
 				git push --force origin master
 			EOF
 		fi
 
-		chmod +x /etc/periodic/${INTERVAL}/ginavbs.sh
+		chmod +x /etc/periodic/${INTERVAL}/ginavbs
 
 		exec "/usr/sbin/crond" "-f" &
 	;;
