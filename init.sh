@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1090
 
-# GINAvbs: A backup solution making use of the power of Git
+# GINAvbs: A backup solution using Github
 # (c) 2016-2018 GINAvbs, LLC (https://erebos.xyz/)
 # Easy to use backups for configurations, logs and sql files.
 
-# This file is copyright under the latest version of the EUPL.
-# Please see LICENSE file for your rights under this license.
+# This file is copyright protected under the latest version of the EUPL.
+# Please read the LICENSE file for further information.
 
-# This program is initially designed for the Erebos Network.
+# This program was initially designed for the Erebos Network.
 # If you are neither of those make sure be warned that you use, copy and/or
 # modify at your own risk.
 
-# Futhermore it's not recommended to use GINAvbs with another shell than
+# Futhermore it's not recommended to use GINAvbs with a different shell than
 # GNU bash version 4.4
 
 # It is highly recommended to use set -eEuo pipefail for every setup script
@@ -23,9 +23,9 @@ set -o nounset  # Exposes unset variables
 
 
 #### SPECIAL FUNCTIONS #####
-# Functions with the purpose of making coding more convinient and
+# Functions with the purpose of making coding more convenient and
 # debugging a bit easier.
-# Do not missunderstand "SPECIAL FUNCTIONS" as test functions.
+# Disclaimer: "SPECIAL FUNCTIONS" are not test functions!
 #
 # NOTE: SPECIAL FUNCTIONS start with three CAPS letter.
 #
@@ -40,14 +40,13 @@ EOS_string(){
 
 
 ######## GLOBAL VARIABLES AND ENVIRONMENT VARIABLES #########
-# For better maintainability, we define all global variables at the top.
-# This allows us to make changes at their defaults
-# in one place and lowers the risk of dumb bugs.
+# For better maintainability, global variables are defined at the top.
+# This makes changes easier and lowers the risk of preventable bugs.
 #
-# GLOBAL variables are all, written in CAPS
-# LOCAL variables are all, starting with a underscore
+# GLOBAL variables are written in CAPS
+# LOCAL variables start with an underscore
 #
-# NOTE: Variables starting with double underscore are readonly
+# NOTE: Variables starting with a double underscore are read only
 #
 # IF YOU ARE AWARE OF A BETTER FORM OF NAMING FEEL FREE TO OPEN A ISSUE
 # OTHERWISE PLEASE USE THIS AS A GUIDELINE FOR ANY COMMIT
@@ -80,7 +79,7 @@ PASSWORD=${GINA_PASSWORD:-""}
 INTERVAL=${GINA_INTERVAL:-"weekly"}
 
 # COLOR / FORMAT VARIABLES
-# Set some colors because without it ain't no fun
+# Set some colors because without them ain't fun
 COL_NC='\e[0m' # default color
 
 COL_LIGHT_GREEN='\e[1;32m' # green
@@ -96,7 +95,7 @@ DONE="${COL_LIGHT_GREEN} done!${COL_NC}" # a small motivation ^^
 OVER="\\r\\033[K" # back to line start
 
 # LOGO / LICENSE / MANPAGE VARIABLES
-# Our temporary logo, will might be updated someday
+# Our temporary logo, might be updated in the future
 EOS_string LOGO <<-'EOS'
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 +                      ___________   _____        __                           +
@@ -108,21 +107,23 @@ EOS_string LOGO <<-'EOS'
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EOS
 
-# Licenceing, recommedations and warnings
+# Licensing, recommedations and warnings
 EOS_string LICENSE <<-'EOS'
-+ # GINAvbs: A backup solution making use of the power of Git
-+ # (c) 2016-2018 GINAvbs, LLC (https://erebos.xyz/)
-+ # Easy to use backups for configurations, logs and sql files.
-+
-+ # This file is copyright under the latest version of the EUPL.
-+ # Please see LICENSE file for your rights under this license.
-+
-+ # This Programm is initialy designt for the Erebos Network.
-+ # If you are neider of those make sure be warned thet you use, copie and/or
-+ # modify at your own risk.
-+
-+ # Futhermore it's not recommended to use GINAvbs with another shell than
-+ # GNU bash version 4.4
+
+
++# GINAvbs: A backup solution using Github
++# (c) 2016-2018 GINAvbs, LLC (https://erebos.xyz/)
++# Easy to use backups for configurations, logs and sql files.
+
++# This file is copyright protected under the latest version of the EUPL.
++# Please read the LICENSE file for further information.
+
++# This program was initially designed for the Erebos Network.
++# If you are neither of those make sure be warned that you use, copy and/or
++# modify at your own risk.
+
++# Futhermore it's not recommended to use GINAvbs with a different shell than
++# GNU bash version 4.4
 +
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EOS
@@ -132,18 +133,17 @@ EOS_string MANPAGE <<-'EOS'
 + # Manual:
 +
 + # -r --remote "exports to a remote repository"
-+ # -i --interval "sets the interval of the backup to 15min/daily/hourly/monthly/weekly"
++ # -i --interval "sets the interval of backups to 15min/daily/hourly/monthly/weekly"
 + # -k --sshkey "deploys a given sshkey"
 + # -s --sql "activates sql mode"
 + # -d --delete "deletes local repo"
 + # -h --help "shows man page"
 +
-+ # really hope that helps you
 +
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EOS
 
-# This line has decorative purpose only
+# This line serves decorative purposes only
 EOS_string COOL_LINE <<-'EOS'
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EOS
@@ -152,18 +152,18 @@ EOS
 ######## FUNCTIONS #########
 # Functions that are part of the core functionality of GINAvbs
 #
-# FUNCTIONS are all, written in lowercase
+# FUNCTIONS are written in lowercase
 #
-# IF YOU ARE AWARE OF A BETTER FORM OF NAMING FEEL FREE TO OPEN A ISSUE
+# IF YOU ARE AWARE OF A BETTER NAMING SCEME FEEL FREE TO OPEN AN ISSUE
 # OTHERWISE PLEASE USE THIS AS A GUIDELINE FOR ANY COMMIT
 
 install() {
-	# Install GINAvbs and dependency packages passed in via argument array
+	# Install GINAvbs and dependency packages passed in via an argument array
 	declare -a _argArray1=(${!1})
 	declare -a _installArray=("")
 
 	# Debian based package install - debconf will download the entire package
-	# list so we just create an array of packages not currently installed to
+	# list so we just create an array of any packages missing to
 	# cut down on the amount of download traffic.
 
 	for i in "${_argArray1[@]}"; do
@@ -223,7 +223,7 @@ install() {
 	;;
 	'arch'|'manjaro')
 		if [[ ${_installArray[@]} ]]; then
-			# Installing Packages if started as root
+			# Installing Packages if script was started as root
 			if [[ $(pacman -S --noconfirm ${_installArray[@]}) ]]; then
 				# Cleaning cached files
 				pacman -Scc --noconfirm
@@ -244,7 +244,7 @@ install() {
 	;;
 	'debian'|'ubuntu'|'mint'|'kali')
 		if [[ ${_installArray[@]} ]]; then
-			# Installing Packages if started as root
+			# Installing Packages if the script was started as root
 			if [[ $(apt-get install ${_installArray[@]} -y) ]]; then
 				# Cleaning cached files
 				apt-get clean -y
@@ -273,10 +273,10 @@ make_temporary_log() {
 	TEMPLOG=$(mktemp /tmp/gina_temp.XXXXXX)
 	# Open handle 3 for templog
 	exec 3>"$TEMPLOG"
-	# Delete templog, but allow for addressing via file handle
+	# Delete templog, but allow addressing via file handle
 	# This lets us write to the log without having a temporary file on
-	# the drive, which is meant to be a security measure so there is not a
-	# lingering file on the drive during the install process
+	# the drive, which is meant to be a security measure so there is no
+	# file lingering on the drive during the install process
 	rm -f "$TEMPLOG"
 
 	return $?
@@ -314,7 +314,7 @@ make_repo() {
 
 	git remote add origin ${REPOSITORY} || true
 
-	# Show a colored message showing it's status
+	# Print a colored message with a status report
 	echo -e "+ [${TICK}] Create repository in ${__DIR}"
 
 	return $?
@@ -349,7 +349,7 @@ update_repo() {
 			 origin master \
 			 || true
 
-	# Show a colored message showing it's status
+	# Print a colored message showing it's status
 	echo -e "+ [${TICK}] Update repository in ${__DIR}"
 
 	return $?
@@ -361,7 +361,7 @@ nuke_everything() {
 
 	north_korea_mode=enabled;
 
-	# welp, all local informations will be destroyed
+	# welp, all local data will be destroyed
 
 	return $?
 } 2>/dev/null
@@ -397,7 +397,7 @@ error_handler(){
 	echo "+"
 
 	case $1 in
-	40) echo "+ Bad Request: This function needs at least one Argument!";;
+	40) echo "+ Bad Request: This function expects at least one Argument!";;
 	43) echo "+ Permission Denied: Please try again as root!";;
 	44) echo "+ Not Found: Username and Password not found!";;
 	51) echo "+ Not Implemented: Please read the Manual, fool!";;
@@ -537,7 +537,7 @@ main(){
 	PASSWORD="${_tmp#*:}"
 
 	if [[ ${USER} == ${PASSWORD} ]] && ! [[ ${SSHKEY} ]]; then
-		# Check if no username or password and/or sshkey was added
+		# Check if username or password and/or sshkey was added
 		return 44
 	fi
 
