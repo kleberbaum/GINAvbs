@@ -308,9 +308,10 @@ make_repo() {
 	#rm -rf ${__DIR}/*
 
 	git init || true
-
-	git config --global user.name "GINAvbs"
-	git config --global user.email "ginavbs@erebos.xyz"
+	
+	# Set git username and useremail
+	git config user.name "GINAvbs"
+	git config user.email "ginavbs@erebos.xyz"
 
 	git remote add origin ${REPOSITORY} || true
 
