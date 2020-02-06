@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1090
 
-# GINAvbs: A backup solution using Github
+# GINAvbs: A backup solution using git
 # (c) 2016-2018 GINAvbs, LLC (https://erebos.xyz/)
 # Easy to use backups for configurations, logs and sql files.
 
@@ -111,7 +111,7 @@ EOS
 EOS_string LICENSE <<-'EOS'
 
 
-+ # GINAvbs: A backup solution using Github
++ # GINAvbs: A backup solution using git
 + # (c) 2016-2018 GINAvbs, LLC (https://erebos.xyz/)
 + # Easy to use backups for configurations, logs and sql files.
 
